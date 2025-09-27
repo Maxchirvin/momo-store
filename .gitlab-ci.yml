@@ -18,7 +18,7 @@ build_simple:
   stage: build
   image: alpine:3.18
   script:
-    - echo "🚀 Build stage"
+    - echo "Build stage"
     - apk add --no-cache curl
     - curl --version
   only:
