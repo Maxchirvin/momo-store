@@ -1,17 +1,22 @@
-# Momo Store aka Пельменная №2
+# Momo Store - Интернет магазин
 
-<img width="900" alt="image" src="https://user-images.githubusercontent.com/9394918/167876466-2c530828-d658-4efe-9064-825626cc6db5.png">
+## Демонстрация инфраструктуры
+- **URL приложения**: http://momo-store.158.160.137.12.nip.io
+- **Kubernetes кластер**: momo-store-k8s-cluster
+- **Внешний IP**: 158.160.137.12
 
-## Frontend
+## Архитектура
+- **Frontend**: Vue.js приложение в Kubernetes
+- **Backend**: Go API сервис  
+- **База данных**: Yandex Object Storage (S3)
+- **Ingress**: Nginx Ingress Controller
 
+## Инфраструктура
+- Kubernetes кластер с 2 узлами
+- S3 бакеты для хранения данных
+- GitLab CI/CD для автоматизации
+- Terraform для управления инфраструктурой
+
+## Развертывание
 ```bash
-npm install
-NODE_ENV=production VUE_APP_API_URL=http://localhost:8081 npm run serve
-```
-
-## Backend
-
-```bash
-go run ./cmd/api
-go test -v ./... 
-```
+kubectl apply -f infrastructure/k8s/ -n momo-store
