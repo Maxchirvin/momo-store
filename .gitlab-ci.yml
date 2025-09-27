@@ -1,0 +1,53 @@
+variables:
+  VERSION: 1.0.${CI_PIPELINE_ID}
+
+stages:
+  - pre-build
+  - build
+  - test
+  - deploy
+
+include:
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+
+before_script:
+  - export KUBECONFIG=/tmp/kubeconfig
+  - echo "$KUBE_CONFIG" | base64 -d > $KUBECONFIG
+
+build-backend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - cd backend
+    - docker build -t ${CI_REGISTRY_IMAGE}/backend:${VERSION} .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push ${CI_REGISTRY_IMAGE}/backend:${VERSION}
+  only:
+    - main
+
+build-frontend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - cd frontend
+    - docker build -t ${CI_REGISTRY_IMAGE}/frontend:${VERSION} .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push ${CI_REGISTRY_IMAGE}/frontend:${VERSION}
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  image: alpine/k8s:1.26.10
+  script:
+    - kubectl create namespace momo-store --dry-run=client -o yaml | kubectl apply -f -
+    - kubectl apply -f infrastructure/k8s/ -n momo-store
+    - echo "Application deployed to http://84.252.139.116"
+  when: manual
+  only:
+    - main
