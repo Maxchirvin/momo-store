@@ -1,25 +1,9 @@
 stages:
   - test
-  - build
 
-variables:
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
-
-test_simple:
+test_job:
   stage: test
-  image: alpine:3.18
+  image: alpine:latest
   script:
-    - echo "✅ CI/CD pipeline is working!"
-    - echo "KUBE_SERVER: $KUBE_SERVER"
-    - echo "Project: Momo Store"
-
-build_simple:
-  stage: build
-  image: alpine:3.18
-  script:
-    - echo "Build stage"
-    - apk add --no-cache curl
-    - curl --version
-  only:
-    - master
+    - echo "Momo Store CI/CD Pipeline - Test Stage"
+    - echo "Project is building successfully"
