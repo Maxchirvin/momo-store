@@ -1,0 +1,13 @@
+app:
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - host: momo-store.your-domain.com  # Ваш домен
+        paths:
+          - path: /
+            pathType: Prefix
+
+# Настройки для Яндекс.Облака
+persistence:
+  storageClass: yc-network-ssd  # Использовать SSD от Яндекс

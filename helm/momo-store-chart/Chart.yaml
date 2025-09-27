@@ -1,0 +1,16 @@
+apiVersion: v2
+name: momo-store
+description: Helm chart for Momo Store E-commerce Application
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+annotations:
+  artifacthub.io/prerelease: "false"
+  artifacthub.io/links: |
+    - name: Momo Store GitHub
+      url: https://github.com/your-org/momo-store
+
+maintainers:
+  - name: Student
+    email: student@example.com
