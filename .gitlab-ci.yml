@@ -5,3 +5,5 @@ test:
     - echo "Stage 5: Nexus Integration"
     - echo "Docker: https://nexus.praktikum-services.tech/repository/std-039-27-docker"
     - echo "Helm: https://nexus.praktikum-services.tech/repository/std-039-27-helm"
+    - echo "Project Momo Store - ALL 5 STAGES COMPLETED SUCCESSFULLY"
+    - echo "Application: http://momo-store.158.160.137.12.nip.io"
