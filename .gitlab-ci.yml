@@ -1,18 +1,7 @@
-stages:
-  - test
-  - build
-
-test_stage:
-  stage: test
-  image: alpine:3.18
+test:
+  image: alpine:latest
   script:
-    - echo "Testing Momo Store with Nexus Integration"
-    - echo "Nexus Docker: https://nexus.praktikum-services.tech/repository/std-039-27-docker"
-    - echo "Nexus Helm: https://nexus.praktikum-services.tech/repository/std-039-27-helm"
-
-build_stage:
-  stage: build
-  image: alpine:3.18
-  script:
-    - echo "Building with Nexus artifacts"
-    - echo "Stage 5: Nexus Integration completed"
+    - echo "Momo Store CI/CD Pipeline"
+    - echo "Stage 5: Nexus Integration"
+    - echo "Docker: https://nexus.praktikum-services.tech/repository/std-039-27-docker"
+    - echo "Helm: https://nexus.praktikum-services.tech/repository/std-039-27-helm"
