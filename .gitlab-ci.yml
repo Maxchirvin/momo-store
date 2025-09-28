@@ -7,7 +7,6 @@ variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
 
-# Тестирование приложения
 unit_tests:
   stage: test
   image: node:18-alpine
@@ -17,12 +16,10 @@ unit_tests:
     - echo "Running unit tests for Momo Store"
     - echo "Node version: $(node --version)"
     - echo "NPM version: $(npm --version)"
-    - curl --version
   only:
     - merge_requests
     - develop
 
-# Сборка Docker образа
 build_docker:
   stage: build
   image: docker:20.10
@@ -33,53 +30,37 @@ build_docker:
   script:
     - echo "Building Docker image for Momo Store"
     - docker --version
-    - echo "Build environment ready"
   only:
     - main
     - develop
 
-# Деплой в staging окружение
 deploy_staging:
   stage: deploy
   image: alpine:3.18
   before_script:
     - apk add --no-cache curl
-    - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-    - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-    - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
   script:
     - echo "Deploying to staging environment"
-    - kubectl version --client
-    - helm version
-    - echo "Staging deployment completed"
+    - curl --version
   environment:
     name: staging
-    url: http://staging.momo-store.example.com
   only:
     - develop
 
-# Деплой в production (ручной)
 deploy_production:
   stage: deploy
   image: alpine:3.18
   before_script:
     - apk add --no-cache curl
-    - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-    - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-    - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
   script:
     - echo "Deploying to production environment"
-    - kubectl version --client
-    - helm version
-    - echo "Production deployment completed"
+    - curl --version
   environment:
     name: production
-    url: http://momo-store.158.160.137.12.nip.io
   only:
     - main
   when: manual
 
-# Задание для Nexus интеграции
 nexus_integration:
   stage: test
   image: alpine:3.18
@@ -87,6 +68,5 @@ nexus_integration:
     - echo "Nexus Integration Verification"
     - echo "Docker Registry: https://nexus.praktikum-services.tech/repository/std-039-27-docker"
     - echo "Helm Repository: https://nexus.praktikum-services.tech/repository/std-039-27-helm"
-    - echo "Nexus integration completed successfully"
   only:
     - main
