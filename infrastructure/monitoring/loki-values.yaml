@@ -1,0 +1,16 @@
+loki:
+  enabled: true
+  config:
+    auth_enabled: false
+    ingester:
+      chunk_idle_period: 1h
+      max_chunk_age: 1h
+      chunk_target_size: 1048576
+      chunk_retain_period: 30s
+  
+promtail:
+  enabled: true
+  config:
+    serverPort: 3101
+    clients:
+      - url: http://loki:3100/loki/api/v1/push

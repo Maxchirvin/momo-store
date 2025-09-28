@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-kubernetes-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  kubernetes-cluster.json: |-
+    {
+      "dashboard": {
+        "id": null,
+        "title": "Kubernetes Cluster Monitoring",
+        "tags": ["kubernetes", "cluster"],
+        "timezone": "browser",
+        "panels": [...],
+        "time": {"from": "now-6h", "to": "now"},
+        "refresh": "30s"
+      }
+    }
