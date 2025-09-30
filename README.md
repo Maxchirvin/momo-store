@@ -3,6 +3,9 @@
 ## Пельменная №2 ![Логотип Momo Store](img/1.png)
 URL сайта http://89.169.163.211:30080/momo-store/catalog
 
+## О проекте
+Momo Store — интернет-магазин "Пельменная №2". Репозиторий содержит фронтенд (Vue.js), бэкенд (Go API) и инфраструктуру для Kubernetes с Terraform и Helm. Реализован CI/CD pipeline с проверкой безопасности и автоматическим деплоем.
+
 ## Инфраструктура
 ````
 momo-store/
@@ -55,5 +58,93 @@ momo-store/
 ├── .gitlab-ci.yml           # CI/CD конфигурация
 ├── README.md                # Этот файл
 └── setup-corporate-nexus-docker.sh # Скрипт настройки Nexus для CI/CD
+````
 
 ## Backend
+```
+cd backend
+docker build -t momo-backend .
+docker run -p 8080:8080 momo-backend
+```
+
+## Frontend
+```
+cd frontend
+docker build -t momo-frontend .
+docker run -p 80:80 momo-frontend
+```
+
+## Деплой в Kubernetes
+```
+kubectl apply -f infrastructure/k8s/backend-deployment.yaml
+kubectl apply -f infrastructure/k8s/frontend-deployment.yaml
+kubectl apply -f infrastructure/k8s/ingress.yaml
+```
+Проверка
+```
+kubectl get pods
+kubectl get svc
+kubectl get ingress
+```
+
+## Мониторинг
+```
+kubectl apply -f infrastructure/monitoring/prometheus-stack.yaml
+kubectl apply -f infrastructure/monitoring/loki-values.yaml
+kubectl apply -f infrastructure/monitoring/momo-store-dashboard.yaml
+```
+
+## Nexus
+```
+kubectl apply -f infrastructure/nexus/nexus-deployment.yaml
+```
+Настройка
+```
+bash setup-corporate-nexus-docker.sh
+```
+## Terraform
+
+В файле infrastructure/terraform/terraform.tfvars задать значения:
+```
+yandex_cloud_id
+
+yandex_folder_id
+
+yandex_zone
+
+yandex_token
+
+s3_access_key
+
+s3_secret_key
+```
+Применение
+```
+cd infrastructure/terraform
+terraform init
+terraform plan
+terraform apply
+```
+## CI/CD
+Файл .gitlab-ci.yml включает:
+Основные переменные, которые используются:
+
+| Key                  | Описание                       |
+| -------------------- | ------------------------------ |
+| CI_REGISTRY          | GitLab registry URL            |
+| CI_REGISTRY_IMAGE    | GitLab image URL               |
+| CI_REGISTRY_USER     | Логин для registry             |
+| CI_REGISTRY_PASSWORD | Пароль для registry            |
+| KUBE_CONFIG          | base64-encoded kubeconfig      |
+| KUBE_NAMESPACE       | namespace для деплоя           |
+| KUBE_SERVER          | API server кластера            |
+| KUBE_TOKEN           | Токен для деплоя               |
+| NEXUS_USERNAME       | Пользователь Nexus             |
+| NEXUS_PASSWORD       | Пароль Nexus                   |
+| NEXUS_URL            | URL корпоративного репозитория |
+| S3_ACCESS_KEY        | Доступ к Object Storage        |
+| S3_SECRET_KEY        | Секрет для S3                  |
+| S3_BUCKET_NAME       | Имя бакета                     |
+| S3_ENDPOINT_URL      | URL S3                         |
+
+
