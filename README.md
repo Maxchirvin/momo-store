@@ -1,4 +1,4 @@
-# Momo Store - Интернет магазин вкусных пельменей взятые из репозитория Стасяна. Покупайте наши пельмени и будете довольны!
+# Momo Store - Интернет магазин пельменей.
 
 ## Пельменная №2 ![Логотип Momo Store](img/1.png)
 URL сайта http://89.169.163.211:30080/
@@ -86,13 +86,32 @@ kubectl get pods
 kubectl get svc
 kubectl get ingress
 ```
-
+## Использование Helm-чарта
+Добавление репозитория
+```
+helm repo add momo-store http://51.250.33.111:8081/repository/helm-repo/
+helm repo update
+```
+Установка приложения
+```
+helm upgrade --install --atomic -n momo-store momo-store momo-store/momo-store \
+  --set backend.image.tag=1.0.123 \
+  --set frontend.image.tag=1.0.123
+```
 ## Мониторинг
 ```
 kubectl apply -f infrastructure/monitoring/prometheus-stack.yaml
 kubectl apply -f infrastructure/monitoring/loki-values.yaml
 kubectl apply -f infrastructure/monitoring/momo-store-dashboard.yaml
 ```
+
+## Дашборды
+- Momo Store Dashboard: Метрики приложения (запросы в секунду, время ответа, ошибки)
+
+- Kubernetes Dashboard: Состояние кластера и ресурсов
+
+- Application Logs: Логи приложения через Loki
+
 
 ## Nexus
 ```
@@ -147,4 +166,24 @@ terraform apply
 | S3_BUCKET_NAME       | Имя бакета                     |
 | S3_ENDPOINT_URL      | URL S3                         |
 
+## Обслуживание и устранение неисправностей
+Проверка состояния
+```
+kubectl get all -n momo-store
+kubectl describe ingress momo-store-ingress -n momo-store
+```
+Просмотр логов
+```
+kubectl logs -f deployment/momo-store-backend -n momo-store
+kubectl logs -f deployment/momo-store-frontend -n momo-store
+```
+Отладка
+```
+kubectl run debug-pod --image=busybox -n momo-store --rm -it -- sh
+```
+## Откат версии
+```
+kubectl rollout undo deployment/momo-store-backend -n momo-store
+kubectl rollout undo deployment/momo-store-frontend -n momo-store
+```
 
