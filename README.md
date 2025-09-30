@@ -55,3 +55,5 @@ momo-store/
 ├── .gitlab-ci.yml           # CI/CD конфигурация
 ├── README.md                # Этот файл
 └── setup-corporate-nexus-docker.sh # Скрипт настройки Nexus для CI/CD
+
+## Backend
